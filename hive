@@ -1,0 +1,117 @@
+
+1.Number of Educated and un-educated (and Gender wise).
+-------------------------------------------------------
+
+
+hive> create database education;
+
+hive> use education;
+
+hive> add jar hdfs://localhost:54310/hivejar/hive-hcatalog-core-1.2.1.jar;
+
+hive> create external table census (Age int, Education string, MaritalStatus string, Gender string, TaxFilerStatus string, Income double, Parents string, CountryofBirth string, Citizenship string, WeeksWorked int) row format serde 'org.apache.hive.hcatalog.data.JsonSerDe';
+
+hive> load data local inpath '/home/lokesh/Documents/A-Final Project/Census Data/sample.dat'  overwrite into table census;
+
+
+
+Number of Uneducated:
+---------------------
+
+hive> add jar hdfs://localhost:54310/hivejar/hive-hcatalog-core-1.2.1.jar;
+converting to local hdfs://localhost:54310/hivejar/hive-hcatalog-core-1.2.1.jar
+Added [/usr/local/hive/iotmp/hive-hcatalog-core-1.2.1.jar] to class path
+Added resources: [hdfs://localhost:54310/hivejar/hive-hcatalog-core-1.2.1.jar]
+
+hive> select Gender,count(*) from census where (age > 17) and (Education = " 9th grade" or Education = " 5th or 6th grade" or Education = " 7th and 8th grade" or Education = " 1st 2nd 3rd or 4th grade" or Education = " Less than 1st grade") group by Gender;
+Query ID = hduser_20170217152341_9b8639c7-c8ea-492f-a2f7-dc16cda857ca
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1487322359868_0003, Tracking URL = http://ubuntu:8088/proxy/application_1487322359868_0003/
+Kill Command = /usr/local/hadoop/bin/hadoop job  -kill job_1487322359868_0003
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2017-02-17 15:23:51,706 Stage-1 map = 0%,  reduce = 0%
+2017-02-17 15:24:04,469 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 6.27 sec
+2017-02-17 15:24:19,266 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 10.37 sec
+MapReduce Total cumulative CPU time: 10 seconds 370 msec
+Ended Job = job_1487322359868_0003
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 10.37 sec   HDFS Read: 608755 HDFS Write: 21 SUCCESS
+Total MapReduce CPU Time Spent: 10 seconds 370 msec
+OK
+ Female	82
+ Male	60
+Time taken: 40.303 seconds, Fetched: 2 row(s)
+
+Number of Educated:
+-------------------
+
+hive> select Gender,count(*) from census where Education = " High school graduate" or Education = " 12th grade no diploma" or Education = " 11th grade" or Education = " Doctorate degree(PhD EdD)" or Education = " Bachelors degree(BA AB BS)" or Education = " Some college but no degree" or Education = " Associates degree-academic program" or Education = " Associates degree-occup /vocational"  or Education = " Masters degree(MA MS MEng MEd MSW MBA)" or Education = " Prof school degree (MD DDS DVM LLB JD)" or Education = " 10th grade" group by Gender;
+Query ID = hduser_20170210145358_21e889c3-3425-4800-b36c-a3e1f00ee38d
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1486716302589_0006, Tracking URL = http://ubuntu:8088/proxy/application_1486716302589_0006/
+Kill Command = /usr/local/hadoop/bin/hadoop job  -kill job_1486716302589_0006
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2017-02-10 14:54:10,293 Stage-1 map = 0%,  reduce = 0%
+2017-02-10 14:54:18,941 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 6.0 sec
+2017-02-10 14:54:26,445 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 9.31 sec
+MapReduce Total cumulative CPU time: 9 seconds 310 msec
+Ended Job = job_1486716302589_0006
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 9.31 sec   HDFS Read: 609327 HDFS Write: 22 SUCCESS
+Total MapReduce CPU Time Spent: 9 seconds 310 msec
+OK
+ Female	734
+ Male	626
+Time taken: 30.341 seconds, Fetched: 2 row(s)
+
+
+
+
+How many people will attend next three years college.
+-----------------------------------------------------
+
+
+
+hive> select count(*) from census where age BETWEEN 18 AND 20 and (Education = " 10th grade" or Education= " High school graduate" or Education = " 11th grade" or Education = " 12th grade no diploma");
+
+Query ID = hduser_20170210163034_4a5a7160-f379-4b5b-a0a1-7fa9f7c456a5
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1486716302589_0018, Tracking URL = http://ubuntu:8088/proxy/application_1486716302589_0018/
+Kill Command = /usr/local/hadoop/bin/hadoop job  -kill job_1486716302589_0018
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2017-02-10 16:30:42,545 Stage-1 map = 0%,  reduce = 0%
+2017-02-10 16:30:50,582 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 5.49 sec
+2017-02-10 16:30:57,985 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 9.06 sec
+MapReduce Total cumulative CPU time: 9 seconds 60 msec
+Ended Job = job_1486716302589_0018
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 9.06 sec   HDFS Read: 608624 HDFS Write: 3 SUCCESS
+Total MapReduce CPU Time Spent: 9 seconds 60 msec
+OK
+43
+Time taken: 25.717 seconds, Fetched: 1 row(s)
+
